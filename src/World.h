@@ -9,7 +9,7 @@
 class World
 {
 public:
-  World(const Dino& dino);
+  World(Dino& dino);
   ~World();
 
   bool Scan();

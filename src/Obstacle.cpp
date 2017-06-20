@@ -13,5 +13,5 @@ Obstacle::~Obstacle()
 int Obstacle::GetDistanceFromDino(const Dino& dino)
 {
 	PointStruct dinoPos = dino.GetDinoPos();
-	return (dinoPos.x - _pos.x);
+	return (_pos.x - dinoPos.x);
 }

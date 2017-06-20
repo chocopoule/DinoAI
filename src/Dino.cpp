@@ -4,7 +4,7 @@
 #include <iostream>
 
 
-Dino::Dino(const PointStruct& dinoPos):_dinoPos(dinoPos)
+Dino::Dino(const PointStruct& dinoPos):_dinoPos(dinoPos), _state(NONE)
 {
 }
 

@@ -9,9 +9,9 @@
 #define ColorNoAlpha(p)         ((p) & 0x00FFFFFF)
 
 
-World::World(const Dino& dino) : _dino(dino)
+World::World(Dino& dino) : _dino(dino)
 {
-  initKeyboard();
+  //initKeyboard();
 }
 
 
@@ -68,15 +68,15 @@ void World::UpdateObstacle()
 
 	for (int i = dinoPos.x; i <= dinoPos.x + X_RANGE_MAX; i = i + 2)
 	{
-		COLORREF pixel = ARGB_TO_COLORREF(BitmapPixel(&_grab, i, dinoPos.y+20));
+		COLORREF pixel = ARGB_TO_COLORREF(BitmapPixel(&_grab, i, dinoPos.y + Y_DELTA_FOR_RAY));
 
 		if (pixel == BLACK_COLOR || pixel == BLACK_COLOR2)
 		{
 			if (!isFirstPixelDino)
 			{
-				//std::cout << "obstacle" << std::endl;
-				isFirstPixelDino = false;
-				PointStruct pt = { dinoPos.x + i, dinoPos.y };
+				//std::cout << "dino " << dinoPos.x << " " << dinoPos.y << std::endl;
+				//std::cout << "obstacle " << i << " " << dinoPos.y << std::endl;
+				PointStruct pt = { i, dinoPos.y };
 				std::shared_ptr<Obstacle> obstacle(new Obstacle(pt));
 				_obstacleVec.push_back(obstacle);
 				break;
@@ -91,11 +91,14 @@ void World::UpdateObstacle()
 
 void World::UpdateDino()
 {
+	bool isDinoFound = false;
+
 	PointStruct dinoPos = _dino.GetDinoPos();
 	COLORREF pixel = ARGB_TO_COLORREF(BitmapPixel(&_grab, dinoPos.x, dinoPos.y));
 	if (pixel == BLACK_COLOR || pixel == BLACK_COLOR2)
 	{
 		_dino.SetState(Dino::GROUND);
+		isDinoFound = true;
 	}
 	else
 	{
@@ -103,6 +106,7 @@ void World::UpdateDino()
 		if (pixel == BLACK_COLOR || pixel == BLACK_COLOR2)
 		{
 			_dino.SetState(Dino::CRAWLING);
+			isDinoFound = true;
 		}
 		else
 		{
@@ -112,11 +116,15 @@ void World::UpdateDino()
 				if (pixel == BLACK_COLOR || pixel == BLACK_COLOR2)
 				{
 					_dino.SetState(Dino::JUMPING);
+					isDinoFound = true;
 					break;
 				}
 			}
 		}
 	}
+
+	if (!isDinoFound)
+		std::cout << "DINO IS LOST ! " << std::endl;
 }
 
 

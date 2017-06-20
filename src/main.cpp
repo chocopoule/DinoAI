@@ -5,10 +5,11 @@
 #include "Utils.h"
 #include "Debug.h"
 
+
 void main() 
 {
   const int maxDistanceBeforeJump = 30;
-  PointStruct dinoHeadPos = {235, 220 }; // point on dino's body
+  PointStruct dinoHeadPos = {250, 225 }; // point on dino's body
   Dino dino(dinoHeadPos);
   World world(dino);
 
@@ -20,13 +21,8 @@ void main()
 
     //Debug::PrintCursorPos();
 
-	std::shared_ptr<Obstacle> obstacle = world.GetNearestObstacle();
-	if (obstacle)
-	{
-		int distanceFromDino = obstacle->GetDistanceFromDino(dino);
-		//std::cout << "Distance : " << distanceFromDino << std::endl;
-	}
 	
+	std::cout << dino.GetState() << std::endl;
 
     if (dino.GetState() != Dino::JUMPING)
     {
@@ -38,8 +34,8 @@ void main()
       {
         std::shared_ptr<Obstacle> obstacle = world.GetNearestObstacle();
         int distanceFromDino = obstacle->GetDistanceFromDino(dino);
-        //if (distanceFromDino < maxDistanceBeforeJump)
-        //  dino.Jump();
+        if (distanceFromDino < maxDistanceBeforeJump)
+          dino.Jump();
       }
     }
 	
