@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "World.h"
-#include "windows.h" 
 #include "Utils.h"
 
 
@@ -22,12 +21,7 @@ World::~World()
 
 
 
-typedef struct _BITMAPCAPTURE {
-  HBITMAP hbm;
-  LPDWORD pixels;
-  INT     width;
-  INT     height;
-} BITMAPCAPTURE;
+
 
 BOOL World::CaptureScreen(BITMAPCAPTURE *bmpCapture)
 {
@@ -64,4 +58,15 @@ BOOL World::CaptureScreen(BITMAPCAPTURE *bmpCapture)
   DeleteDC(hdcCapture);
   DeleteDC(hdcScreen);
   return bResult;
+}
+
+
+void World::Scan()
+{
+
+}
+
+Obstacle& World::GetNearestObstacle()
+{
+	return _obstacleVec[0];
 }

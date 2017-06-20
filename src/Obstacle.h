@@ -4,5 +4,7 @@ class Obstacle
 public:
   Obstacle();
   ~Obstacle();
+
+  int GetDistanceFromDino();
 };
 

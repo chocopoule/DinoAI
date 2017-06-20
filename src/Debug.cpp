@@ -7,6 +7,7 @@
 
 
 
+
 std::chrono::time_point<std::chrono::high_resolution_clock> Debug::StartChrono() {
   auto t1 = std::chrono::high_resolution_clock::now();
   return t1;
@@ -27,7 +28,7 @@ void Debug::PrintCursorPos()
   }
 }
 
-void DisplayTargets(const std::vector<PointStruct>& vecList)
+void Debug::DisplayTargets(const std::vector<PointStruct>& vecList)
 {
   auto t1 = std::thread([vecList]() {
     static const int REC_SIZE = 8;
