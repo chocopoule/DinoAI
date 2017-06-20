@@ -4,6 +4,7 @@
 #include "Windows.h" 
 #include <vector>
 #include "Obstacle.h"
+#include <memory>
 
 class World
 {
@@ -11,9 +12,9 @@ public:
   World(const Dino& dino);
   ~World();
 
-  void Scan();
+  bool Scan();
 
-  Obstacle& GetNearestObstacle();
+  std::shared_ptr<Obstacle> GetNearestObstacle();
 
   typedef struct _BITMAPCAPTURE {
 	  HBITMAP hbm;
@@ -24,10 +25,13 @@ public:
 
 private:
   BOOL CaptureScreen(BITMAPCAPTURE *bmpCapture);
+  void UpdateDino();
+  void UpdateObstacle();
 
 private:
   Dino _dino;
-  std::vector<Obstacle> _obstacleVec;
+  BITMAPCAPTURE _grab;
+  std::vector<std::shared_ptr<Obstacle>> _obstacleVec;
 };
 
 

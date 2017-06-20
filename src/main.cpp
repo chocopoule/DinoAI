@@ -8,33 +8,41 @@
 void main() 
 {
   const int maxDistanceBeforeJump = 30;
-  PointStruct dinoHeadPos = { -1243, 227 }; // point on dino's body
+  PointStruct dinoHeadPos = {235, 220 }; // point on dino's body
   Dino dino(dinoHeadPos);
   World world(dino);
 
+  Debug::DisplayTargets({ dinoHeadPos });
+
   while (true) {
     //auto t1 = Debug::StartChrono();
-    world.Scan();
+    bool bScan = world.Scan();
 
     //Debug::PrintCursorPos();
+
+	std::shared_ptr<Obstacle> obstacle = world.GetNearestObstacle();
+	if (obstacle)
+	{
+		int distanceFromDino = obstacle->GetDistanceFromDino(dino);
+		//std::cout << "Distance : " << distanceFromDino << std::endl;
+	}
+	
 
     if (dino.GetState() != Dino::JUMPING)
     {
       if (dino.GetState() != Dino::CRAWLING)
       {
-        dino.Crawl();
+        //dino.Crawl();
       }
       else
       {
-        Obstacle obstacle = world.GetNearestObstacle();
-        int distanceFromDino = obstacle.GetDistanceFromDino();
-        if (distanceFromDino < maxDistanceBeforeJump)
-          dino.Jump();
+        std::shared_ptr<Obstacle> obstacle = world.GetNearestObstacle();
+        int distanceFromDino = obstacle->GetDistanceFromDino(dino);
+        //if (distanceFromDino < maxDistanceBeforeJump)
+        //  dino.Jump();
       }
     }
-    
-    //Debug::DisplayTargets(cactusTarget, dinoTarget);
+	
     //Debug::StopChrono(t1);
-
   }
 }

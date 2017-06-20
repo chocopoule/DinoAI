@@ -17,10 +17,9 @@ World::World(const Dino& dino) : _dino(dino)
 
 World::~World()
 {
+	if (_grab.hbm)
+		DeleteObject(_grab.hbm);
 }
-
-
-
 
 
 BOOL World::CaptureScreen(BITMAPCAPTURE *bmpCapture)
@@ -61,12 +60,91 @@ BOOL World::CaptureScreen(BITMAPCAPTURE *bmpCapture)
 }
 
 
-void World::Scan()
+void World::UpdateObstacle() 
 {
+	PointStruct dinoPos = _dino.GetDinoPos();
+	
+	bool isFirstPixelDino = true;
 
+	for (int i = dinoPos.x; i <= dinoPos.x + X_RANGE_MAX; i = i + 2)
+	{
+		COLORREF pixel = ARGB_TO_COLORREF(BitmapPixel(&_grab, i, dinoPos.y+20));
+
+		if (pixel == BLACK_COLOR || pixel == BLACK_COLOR2)
+		{
+			if (!isFirstPixelDino)
+			{
+				//std::cout << "obstacle" << std::endl;
+				isFirstPixelDino = false;
+				PointStruct pt = { dinoPos.x + i, dinoPos.y };
+				std::shared_ptr<Obstacle> obstacle(new Obstacle(pt));
+				_obstacleVec.push_back(obstacle);
+				break;
+			}
+		}
+		else
+		{
+			isFirstPixelDino = false;
+		}
+	}
 }
 
-Obstacle& World::GetNearestObstacle()
+void World::UpdateDino()
 {
-	return _obstacleVec[0];
+	PointStruct dinoPos = _dino.GetDinoPos();
+	COLORREF pixel = ARGB_TO_COLORREF(BitmapPixel(&_grab, dinoPos.x, dinoPos.y));
+	if (pixel == BLACK_COLOR || pixel == BLACK_COLOR2)
+	{
+		_dino.SetState(Dino::GROUND);
+	}
+	else
+	{
+		COLORREF pixel = ARGB_TO_COLORREF(BitmapPixel(&_grab, dinoPos.x, dinoPos.y + Y_CRAWL_DELTA));
+		if (pixel == BLACK_COLOR || pixel == BLACK_COLOR2)
+		{
+			_dino.SetState(Dino::CRAWLING);
+		}
+		else
+		{
+			for (int i = dinoPos.y; i >= dinoPos.y - Y_RANGE_JUMP_MAX; i = i - 2)
+			{
+				COLORREF pixel = ARGB_TO_COLORREF(BitmapPixel(&_grab, dinoPos.x, i));
+				if (pixel == BLACK_COLOR || pixel == BLACK_COLOR2)
+				{
+					_dino.SetState(Dino::JUMPING);
+					break;
+				}
+			}
+		}
+	}
+}
+
+
+bool World::Scan()
+{
+	if(_grab.hbm)
+		DeleteObject(_grab.hbm);
+
+	_obstacleVec.clear();
+
+	BOOL bCapture = CaptureScreen(&_grab);
+
+	if (bCapture == FALSE || !_grab.hbm)
+	{
+		std::cout << "Capture error" << std::endl;
+		return false;
+	}
+
+	UpdateDino();
+	UpdateObstacle();
+
+	return true;
+}
+
+std::shared_ptr<Obstacle> World::GetNearestObstacle()
+{
+	if (_obstacleVec.size())
+		return _obstacleVec[0];
+	else
+		return nullptr;
 }

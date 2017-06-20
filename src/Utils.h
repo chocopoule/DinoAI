@@ -6,6 +6,15 @@ struct PointStruct { int x; int y; };
 
 static INPUT inputKeybd; // keyboard
 
+const static COLORREF BLACK_COLOR = 4283650899; // 535353
+const static COLORREF BLACK_COLOR2 = 4294111986; // 535353
+const static COLORREF WHITE_COLOR = 4294440951; // F7F7F7
+const static COLORREF WHITE_COLOR2 = 4283716692; // F7F7F7
+
+const static int X_RANGE_MAX = 200;
+const static int Y_RANGE_JUMP_MAX = 200;
+const static int Y_CRAWL_DELTA = 20;
+
 static void initKeyboard() {
   // Set up a generic keyboard event.
   inputKeybd.type = INPUT_KEYBOARD;
