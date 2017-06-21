@@ -6,10 +6,10 @@
 #include "Debug.h"
 
 
-void main() 
+void main()
 {
   const int maxDistanceBeforeJump = 30;
-  PointStruct dinoHeadPos = {250, 225 }; // point on dino's body
+  PointStruct dinoHeadPos = { 250, 225 }; // point on dino's body
   Dino dino(dinoHeadPos);
   World world(dino);
 
@@ -21,12 +21,12 @@ void main()
 
     //Debug::PrintCursorPos();
 
-	
-	std::cout << dino.GetState() << std::endl;
 
-    if (dino.GetState() != Dino::JUMPING)
+    std::cout << dino.GetState() << std::endl;
+
+    if (dino.GetState() != JUMPING)
     {
-      if (dino.GetState() != Dino::CRAWLING)
+      if (dino.GetState() != CRAWLING)
       {
         //dino.Crawl();
       }
@@ -38,7 +38,7 @@ void main()
           dino.Jump();
       }
     }
-	
+
     //Debug::StopChrono(t1);
   }
 }
