@@ -11,7 +11,6 @@
 
 World::World(Dino& dino) : _dino(dino)
 {
-  //initKeyboard();
 }
 
 
@@ -22,7 +21,7 @@ World::~World()
 }
 
 
-BOOL World::CaptureScreen(BITMAPCAPTURE *bmpCapture)
+BOOL World::CaptureScreen(BITMAPCAPTURE *bmpCapture) // from napalm
 {
   BOOL bResult = FALSE;
   if (!bmpCapture)
@@ -97,7 +96,7 @@ void World::UpdateDino()
 	COLORREF pixel = ARGB_TO_COLORREF(BitmapPixel(&_grab, dinoPos.x, dinoPos.y));
 	if (pixel == BLACK_COLOR || pixel == BLACK_COLOR2)
 	{
-		_dino.SetState(Dino::GROUND);
+		_dino.SetState(GROUND);
 		isDinoFound = true;
 	}
 	else
@@ -105,7 +104,7 @@ void World::UpdateDino()
 		COLORREF pixel = ARGB_TO_COLORREF(BitmapPixel(&_grab, dinoPos.x, dinoPos.y + Y_CRAWL_DELTA));
 		if (pixel == BLACK_COLOR || pixel == BLACK_COLOR2)
 		{
-			_dino.SetState(Dino::CRAWLING);
+			_dino.SetState(CRAWLING);
 			isDinoFound = true;
 		}
 		else
@@ -115,7 +114,7 @@ void World::UpdateDino()
 				COLORREF pixel = ARGB_TO_COLORREF(BitmapPixel(&_grab, dinoPos.x, i));
 				if (pixel == BLACK_COLOR || pixel == BLACK_COLOR2)
 				{
-					_dino.SetState(Dino::JUMPING);
+					_dino.SetState(JUMPING);
 					isDinoFound = true;
 					break;
 				}

@@ -15,14 +15,7 @@ const static int X_RANGE_MAX = 400;
 const static int Y_DELTA_FOR_RAY = 20;
 const static int Y_RANGE_JUMP_MAX = 200;
 const static int Y_CRAWL_DELTA = 20;
-//
-//static void initKeyboard() {
-//  // Set up a generic keyboard event.
-//  inputKeybd.type = INPUT_KEYBOARD;
-//  inputKeybd.ki.wScan = 0; // hardware scan code for key
-//  inputKeybd.ki.time = 0;
-//  inputKeybd.ki.dwExtraInfo = 0;
-//}
+
 
 static void PressUpKey() {
 	INPUT inputKeybd;

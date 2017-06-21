@@ -29,7 +29,7 @@ private:
   void UpdateObstacle();
 
 private:
-  Dino _dino;
+  Dino& _dino;
   BITMAPCAPTURE _grab;
   std::vector<std::shared_ptr<Obstacle>> _obstacleVec;
 };
