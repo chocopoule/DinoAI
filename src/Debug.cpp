@@ -34,8 +34,9 @@ void Debug::DisplayRectangles(const std::vector<PointStruct>& vecList, int rColo
     static const int REC_SIZE = 8;
     while (true) {
       HDC hDC2 = GetDC(NULL);
-      SelectObject(hDC2, CreatePen(PS_SOLID, 5, RGB(rColor, gColor, bColor)));
+      //SelectObject(hDC2, CreatePen(PS_SOLID, 5, RGB(rColor, gColor, bColor)));
       auto printRectangle = [hDC2](const PointStruct& point) {
+		SelectObject(hDC2, GetStockObject(NULL_BRUSH));
         Rectangle(hDC2, point.x + REC_SIZE, point.y + REC_SIZE, point.x - REC_SIZE, point.y - REC_SIZE);
       };
       std::for_each(vecList.begin(), vecList.end(), printRectangle);

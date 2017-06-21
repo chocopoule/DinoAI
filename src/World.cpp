@@ -83,7 +83,17 @@ void World::UpdateObstacle()
 		}
 		else
 		{
-			isFirstPixelDino = false;
+			if (pixel == WHITE_COLOR || pixel == WHITE_COLOR2)
+			{
+				isFirstPixelDino = false;
+			}
+			else
+			{
+				std::cout << pixel << std::endl;
+				
+			}
+			
+			
 		}
 	}
 }

@@ -17,7 +17,7 @@ Dino::~Dino()
 void Dino::Jump()
 {
   std::cout << "JUMP" << std::endl;
-  ReleaseDownKey();
+  //ReleaseDownKey();
   PressUpKey();
 }
 
