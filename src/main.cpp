@@ -31,7 +31,8 @@ void main()
     //auto t1 = Debug::StartChrono();
     bool bScan = world.Scan();
 
-    //Debug::PrintCursorPos();
+    //Debug::PrintCursorPosAndColor(world);
+
 
     DinoState dinoState = dino.GetState();
 

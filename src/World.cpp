@@ -3,10 +3,7 @@
 #include "Utils.h"
 
 
-#define ARGB_TO_COLORREF(a)     (COLORREF)(((a) & 0xFF00FF00) | (((a) & 0xFF0000) >> 16) | (((a) & 0xFF) << 16)) // ARGB to ABGR
-#define BitmapPixel(b, x, y)    ((b)->pixels[(y) * (b)->width + (x)]) // pixel is ARGB
-#define GetAValue(cr)           (int)((cr) >> 24)
-#define ColorNoAlpha(p)         ((p) & 0x00FFFFFF)
+
 
 
 World::World(Dino& dino) : _dino(dino)
@@ -69,6 +66,9 @@ void World::UpdateObstacle()
 	{
 		COLORREF pixel = ARGB_TO_COLORREF(BitmapPixel(&_grab, i, dinoPos.y + Y_DELTA_FOR_RAY));
 
+		//BYTE pixRGBLumi = GetRValue(pixel) + GetGValue(pixel) + GetBValue(pixel);
+
+
 		if (pixel == BLACK_COLOR || pixel == BLACK_COLOR2)
 		{
 			if (!isFirstPixelDino)
@@ -89,11 +89,8 @@ void World::UpdateObstacle()
 			}
 			else
 			{
-				std::cout << pixel << std::endl;
-				
+				//std::cout << pixel << std::endl;
 			}
-			
-			
 		}
 	}
 }

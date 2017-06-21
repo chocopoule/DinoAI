@@ -4,6 +4,7 @@
 #include <iostream>
 #include <thread>
 #include <algorithm>
+#include "World.h"
 
 
 
@@ -20,11 +21,14 @@ void Debug::StopChrono(const std::chrono::time_point<std::chrono::high_resolutio
   std::cout << "-- perfo -- " << elapsed.count() << " ms" << '\n';
 }
 
-void Debug::PrintCursorPos()
+void Debug::PrintCursorPosAndColor(World& world)
 {
   POINT _cursor;
   if (GetCursorPos(&_cursor)) {
-    std::cout << "x: " << _cursor.x << "  y: " << _cursor.y << std::endl;
+	World::BITMAPCAPTURE grab;
+	BOOL bCapture = world.CaptureScreen(&grab);
+	COLORREF pixel = ARGB_TO_COLORREF(BitmapPixel(&grab, _cursor.x, _cursor.y));
+	std::cout << "x: " << _cursor.x << "  y: " << _cursor.y << "  color: "<< pixel << std::endl;
   }
 }
 

@@ -6,15 +6,9 @@ struct PointStruct { int x; int y; };
 
 
 const static COLORREF BLACK_COLOR = 4283650899; // 535353
-const static COLORREF BLACK_COLOR2 = 4283716692; // 535353
+const static COLORREF BLACK_COLOR2 = 4289506476; // 535353
 const static COLORREF WHITE_COLOR = 4294440951; // F7F7F7
-const static COLORREF WHITE_COLOR2 = 4294375158; // F7F7F7
-//4294111986
-//4289506476
-
-TODO: tout coonvertir en grayscale:
-R+G+B > 255*1.5  == clair color
-R + G + B < 255 * 1.5 == dark color
+const static COLORREF WHITE_COLOR2 = 4278190080; // F7F7F7
 
 
 const static int X_RANGE_MAX = 200;
@@ -45,9 +39,6 @@ static void PressUpKey() {
 	input[2].ki.dwFlags = KEYEVENTF_KEYUP;
 
 	SendInput(4, input, sizeof(INPUT));
-
-
-
 }
 
 
