@@ -28,17 +28,53 @@ void Debug::PrintCursorPos()
   }
 }
 
-void Debug::DisplayTargets(const std::vector<PointStruct>& vecList)
+void Debug::DisplayRectangles(const std::vector<PointStruct>& vecList, int rColor, int gColor, int bColor)
 {
-  auto t1 = std::thread([vecList]() {
+  auto t1 = std::thread([vecList, rColor, gColor, bColor]() {
     static const int REC_SIZE = 8;
     while (true) {
       HDC hDC2 = GetDC(NULL);
-      SelectObject(hDC2, CreatePen(PS_SOLID, 5, RGB(255, 0, 0)));
+      SelectObject(hDC2, CreatePen(PS_SOLID, 5, RGB(rColor, gColor, bColor)));
       auto printRectangle = [hDC2](const PointStruct& point) {
         Rectangle(hDC2, point.x + REC_SIZE, point.y + REC_SIZE, point.x - REC_SIZE, point.y - REC_SIZE);
       };
       std::for_each(vecList.begin(), vecList.end(), printRectangle);
+
+      Sleep(20);
+
+      DeleteDC(hDC2);
+    }
+  });
+  t1.detach();
+}
+
+void Debug::DisplayLine(std::vector<std::pair<PointStruct, PointStruct>>& lineList, int rColor, int gColor, int bColor)
+{
+  auto t1 = std::thread([lineList, rColor, gColor, bColor]() {
+    while (true) {
+      HDC hDC2 = GetDC(NULL);
+     
+
+      HPEN hPenOld;
+
+      // Draw a red line
+      HPEN hLinePen;
+      COLORREF qLineColor;
+      qLineColor = RGB(255, 0, 0);
+      hLinePen = CreatePen(PS_SOLID, 7, qLineColor);
+      hPenOld = (HPEN)SelectObject(hDC2, hLinePen);
+
+      auto printLine = [hDC2](const std::pair<PointStruct, PointStruct>& point) {
+        MoveToEx(hDC2, point.first.x, point.first.y, NULL);
+        LineTo(hDC2, point.second.x , point.second.y);
+      };
+      std::for_each(lineList.begin(), lineList.end(), printLine);
+
+      SelectObject(hDC2, hPenOld);
+      DeleteObject(hLinePen);
+
+
+      Sleep(20);
 
       DeleteDC(hDC2);
     }
