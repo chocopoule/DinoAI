@@ -4,6 +4,7 @@
 
 Obstacle::Obstacle(const PointStruct& pos):_pos(pos)
 {
+	_time  = std::chrono::high_resolution_clock::now();
 }
 
 Obstacle::~Obstacle()

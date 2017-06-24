@@ -42,6 +42,7 @@ private:
   Dino& _dino;
   BITMAPCAPTURE _grab;
   std::vector<std::shared_ptr<Obstacle>> _obstacleVec;
+  std::shared_ptr<Obstacle> _lastFrameObstacle;
   bool _isInverted;
 
 friend class Debug;

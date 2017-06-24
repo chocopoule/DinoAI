@@ -1,12 +1,12 @@
 #include "stdafx.h"
 #include "World.h"
 #include "Utils.h"
+#include <algorithm>
 
 
 
 
-
-World::World(Dino& dino) : _dino(dino), _isInverted(false)
+World::World(Dino& dino) : _dino(dino), _isInverted(false), _lastFrameObstacle(nullptr)
 {
 }
 
@@ -62,7 +62,7 @@ void World::UpdateObstacle()
 	
 	bool isFirstPixelDino = true;
 
-	for (int i = dinoPos.x; i <= dinoPos.x + X_RANGE_MAX; i = i + 2)
+	for (int i = dinoPos.x; i <= dinoPos.x + X_RANGE_MAX; i = i +2 )
 	{
 		COLORREF pixel = ARGB_TO_COLORREF(BitmapPixel(&_grab, i, dinoPos.y + Y_DELTA_FOR_RAY));
 		BYTE pixRGBLumi = GetGrayScale(pixel);
@@ -127,6 +127,28 @@ void World::UpdateDino()
 
 	if (!isDinoFound)
 		std::cout << "DINO IS LOST ! " << std::endl;
+
+	// Dino's speed
+
+	auto obstacle = GetNearestObstacle();
+	if (obstacle && _lastFrameObstacle)
+	{
+		int distanceNew = obstacle->GetDistanceFromDino(_dino);
+		int distanceOld = _lastFrameObstacle->GetDistanceFromDino(_dino);
+		int distancebetween = distanceOld - distanceNew;
+		if (distancebetween > 0 )
+		{
+			auto timeNew = obstacle->GetCapturedTime();
+			auto timeOld = _lastFrameObstacle->GetCapturedTime();
+			auto timeBetween = std::chrono::duration_cast<std::chrono::milliseconds>(timeNew - timeOld);
+
+			double speed = (double)distancebetween / (double)timeBetween.count();
+			_dino.SetDinoSpeed(speed);
+			std::cout << "DINO speed: " << speed << "  distance:" << distancebetween << " time:" << timeBetween.count() << std::endl;
+		}
+	}
+
+
 }
 
 
@@ -166,8 +188,11 @@ bool World::Scan()
 	}
 
 	UpdateInversion();
-	UpdateDino();
 	UpdateObstacle();
+	UpdateDino();
+
+	_lastFrameObstacle = GetNearestObstacle();
+	
 
 	return true;
 }
