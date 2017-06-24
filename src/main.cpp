@@ -15,6 +15,7 @@ void main()
   World world(dino);
 
   //Debug::DisplayRectangles({ dinoHeadPos }, 255,0,0);
+  //Debug::DisplayRectangles({ constantPos }, 255, 0, 255);
   //Debug::DisplayRectangles({ PointStruct{ dinoHeadPos.x, dinoHeadPos.y + Y_CRAWL_DELTA } }, 0, 255, 0);
 
   //std::pair<PointStruct, PointStruct> rayForJump{ dinoHeadPos, PointStruct{ dinoHeadPos.x, dinoHeadPos.y - Y_RANGE_JUMP_MAX } };
@@ -68,9 +69,6 @@ void main()
         }
       }
     }
-
-
-   
     //Debug::StopChrono(t1);
   }
 }

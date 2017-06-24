@@ -28,7 +28,8 @@ void Debug::PrintCursorPosAndColor(World& world)
 	World::BITMAPCAPTURE grab;
 	BOOL bCapture = world.CaptureScreen(&grab);
 	COLORREF pixel = ARGB_TO_COLORREF(BitmapPixel(&grab, _cursor.x, _cursor.y));
-	std::cout << "x: " << _cursor.x << "  y: " << _cursor.y << "  color: "<< pixel << std::endl;
+	BYTE pixRGBLumi = GetGrayScale(pixel);
+	std::cout << "x: " << _cursor.x << "  y: " << _cursor.y << "  color: "<< (int)pixRGBLumi << std::endl;
   }
 }
 

@@ -6,7 +6,7 @@
 
 
 
-World::World(Dino& dino) : _dino(dino)
+World::World(Dino& dino) : _dino(dino), _isInverted(false)
 {
 }
 
@@ -65,11 +65,8 @@ void World::UpdateObstacle()
 	for (int i = dinoPos.x; i <= dinoPos.x + X_RANGE_MAX; i = i + 2)
 	{
 		COLORREF pixel = ARGB_TO_COLORREF(BitmapPixel(&_grab, i, dinoPos.y + Y_DELTA_FOR_RAY));
-
-		//BYTE pixRGBLumi = GetRValue(pixel) + GetGValue(pixel) + GetBValue(pixel);
-
-
-		if (pixel == BLACK_COLOR || pixel == BLACK_COLOR2)
+		BYTE pixRGBLumi = GetGrayScale(pixel);
+		if (IsBlack(pixRGBLumi, _isInverted))
 		{
 			if (!isFirstPixelDino)
 			{
@@ -83,13 +80,9 @@ void World::UpdateObstacle()
 		}
 		else
 		{
-			if (pixel == WHITE_COLOR || pixel == WHITE_COLOR2)
+			if (IsWhite(pixRGBLumi, _isInverted))
 			{
 				isFirstPixelDino = false;
-			}
-			else
-			{
-				//std::cout << pixel << std::endl;
 			}
 		}
 	}
@@ -101,15 +94,17 @@ void World::UpdateDino()
 
 	PointStruct dinoPos = _dino.GetDinoPos();
 	COLORREF pixel = ARGB_TO_COLORREF(BitmapPixel(&_grab, dinoPos.x, dinoPos.y));
-	if (pixel == BLACK_COLOR || pixel == BLACK_COLOR2)
+	BYTE pixRGBLumi = GetGrayScale(pixel);
+	if (IsBlack(pixRGBLumi, _isInverted))
 	{
 		_dino.SetState(GROUND);
 		isDinoFound = true;
 	}
 	else
 	{
-		COLORREF pixel = ARGB_TO_COLORREF(BitmapPixel(&_grab, dinoPos.x, dinoPos.y + Y_CRAWL_DELTA));
-		if (pixel == BLACK_COLOR || pixel == BLACK_COLOR2)
+		pixel = ARGB_TO_COLORREF(BitmapPixel(&_grab, dinoPos.x, dinoPos.y + Y_CRAWL_DELTA));
+		pixRGBLumi = GetGrayScale(pixel);
+		if (IsBlack(pixRGBLumi, _isInverted))
 		{
 			_dino.SetState(CRAWLING);
 			isDinoFound = true;
@@ -118,8 +113,9 @@ void World::UpdateDino()
 		{
 			for (int i = dinoPos.y; i >= dinoPos.y - Y_RANGE_JUMP_MAX; i = i - 2)
 			{
-				COLORREF pixel = ARGB_TO_COLORREF(BitmapPixel(&_grab, dinoPos.x, i));
-				if (pixel == BLACK_COLOR || pixel == BLACK_COLOR2)
+				pixel = ARGB_TO_COLORREF(BitmapPixel(&_grab, dinoPos.x, i));
+				pixRGBLumi = GetGrayScale(pixel);
+				if (IsBlack(pixRGBLumi, _isInverted))
 				{
 					_dino.SetState(JUMPING);
 					isDinoFound = true;
@@ -133,6 +129,26 @@ void World::UpdateDino()
 		std::cout << "DINO IS LOST ! " << std::endl;
 }
 
+
+void World::UpdateInversion()
+{
+	COLORREF pixel = ARGB_TO_COLORREF(BitmapPixel(&_grab, constantPos.x, constantPos.y));
+	BYTE pixRGBLumi = GetGrayScale(pixel);
+	if (IsBlack(pixRGBLumi, false))
+	{
+		if (!_isInverted) {
+			_isInverted = true;
+			std::cout << "INVERT !!!! " << std::endl;
+		}
+	}
+	else
+	{
+		if (_isInverted) {
+			_isInverted = false;
+			std::cout << "INVERT !!!! " << std::endl;
+		}
+	}
+}
 
 bool World::Scan()
 {
@@ -149,6 +165,7 @@ bool World::Scan()
 		return false;
 	}
 
+	UpdateInversion();
 	UpdateDino();
 	UpdateObstacle();
 

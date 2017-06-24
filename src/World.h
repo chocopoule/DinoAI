@@ -11,6 +11,7 @@
 #define GetAValue(cr)           (int)((cr) >> 24)
 #define ColorNoAlpha(p)         ((p) & 0x00FFFFFF)
 
+
 class World
 {
 public:
@@ -34,11 +35,14 @@ private:
   BOOL CaptureScreen(BITMAPCAPTURE *bmpCapture);
   void UpdateDino();
   void UpdateObstacle();
+  void UpdateInversion();
+  
 
 private:
   Dino& _dino;
   BITMAPCAPTURE _grab;
   std::vector<std::shared_ptr<Obstacle>> _obstacleVec;
+  bool _isInverted;
 
 friend class Debug;
 
